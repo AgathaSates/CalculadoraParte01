@@ -47,9 +47,14 @@
                     resultado = primeiroNumero * segundoNumero;
 
                 else if (opcao == "4")
-
+                {
+                    while(segundoNumero == 0)
+                    {
+                        Console.WriteLine("Não é possivel dividir um número por zero");
+                        segundoNumero = Convert.ToDouble(Console.ReadLine());
+                    }
                     resultado = primeiroNumero / segundoNumero;
-
+                }
 
                 Console.WriteLine("-----------------------------");
                 Console.WriteLine("Resultado: " + resultado.ToString("F2"));
