@@ -6,7 +6,7 @@
         static string[] historico = new string[20];
 
         static void Main(string[] args)
-        {            
+        {
             while (true)
             {
                 string opcao = Menu();
@@ -20,9 +20,9 @@
                 else if (Historico(opcao))
                     MostrarHistorico();
 
-                else               
+                else
                     Resultado(Operacoes(opcao));
-                    
+
                 Console.Write(" -> Deseja Realizar outra operação? (S/N): "); // ao final de cada operação volta ao menu
                 string continuar = Console.ReadLine()!.ToUpper(); // "!" usado para parar o warning
                 if (continuar == "N")
@@ -57,7 +57,7 @@
                 return Sair;
             }
 
-            static bool Tabuada(string opcao) 
+            static bool Tabuada(string opcao)
             {
                 bool Tabuada = opcao == "5";
 
@@ -88,16 +88,16 @@
 
                 for (int contador = 1; contador <= 10; contador++)
                 {
-                    int resultadoTabuada = numero * contador;                                    
+                    int resultadoTabuada = numero * contador;
                     Console.WriteLine($" {numero} x {contador} = {resultadoTabuada}");
                 }
-                Console.WriteLine("--------------------------------");              
+                Console.WriteLine("--------------------------------");
             }
 
-            static void MostrarHistorico() 
+            static void MostrarHistorico()
             {
                 Console.Clear();
-                Console.WriteLine("----- Histórico de operações -----");
+                Console.WriteLine("----- Histórico de operações -----"); //titulo
                 if (historico[0] == null)
                 {
                     Console.WriteLine(" (X) Não há operações registradas.");
@@ -109,7 +109,7 @@
                     foreach (string operacao in historico)  //foreach
                     {
                         if (operacao != null)   //apenas para arrays com informação
-                        {   
+                        {
                             Console.WriteLine(operacao);          // imprime cada operação              
                         }
                     }
@@ -129,49 +129,84 @@
                 Console.Write(" -> Digite o segundo número: ");
                 double segundoNumero = Convert.ToDouble(Console.ReadLine());
                 Console.WriteLine("-----------------------------");
-
-                string resultadoInteiro = "";
+                
                 double resultado = 0;
                 string sinal = "";
 
-                if (opcao == "1")
+                switch (opcao)        //switch case para diminuir e melhorar o entendimento do codigo
                 {
-                    resultado = primeiroNumero + segundoNumero;      // resultado original            
-                    sinal = "+";
-                    resultadoInteiro = $" {primeiroNumero} {sinal} {segundoNumero} = {resultado.ToString("F2")}"; //reformulei o resultado para mostrar toda a operação
+                    case "1":
+                        resultado = primeiroNumero + segundoNumero;
+                        sinal = "+";
+                        break;
+
+                    case "2":
+                        resultado = primeiroNumero - segundoNumero;
+                        sinal = "-";
+                        break;
+
+                    case "3":
+                        resultado = primeiroNumero * segundoNumero;
+                        sinal = "x";
+                        break;
+
+                    case "4":
+                        while (segundoNumero == 0)
+                        {
+                            Console.Write(" (X) Não é possível dividir por zero. Digite um número novamente: ");
+                            segundoNumero = Convert.ToDouble(Console.ReadLine());
+                        }
+                        resultado = primeiroNumero / segundoNumero;
+                        sinal = "÷";
+                        break;
                 }
 
-                else if (opcao == "2")
-                {
-                    resultado = primeiroNumero - segundoNumero;
-                    sinal = "-";
-                    resultadoInteiro = $" {primeiroNumero} {sinal} {segundoNumero} = {resultado.ToString("F2")}";
-                }
+                string resultadoInteiro = $" {primeiroNumero} {sinal} {segundoNumero} = {resultado.ToString("F2")}";//reformulei o resultado para mostrar toda a operação
 
-                else if (opcao == "3")
-                {
-                    resultado = primeiroNumero * segundoNumero;
-                    sinal = "x";
-                    resultadoInteiro = $" {primeiroNumero} {sinal} {segundoNumero} = {resultado.ToString("F2")}";
-                }
+                historico[operacoes] = $" {resultadoInteiro}";//guarda no array a operação criando o historico
 
-                else if (opcao == "4")
-                {
-                    while (segundoNumero == 0)
-                    {
-                        Console.Write(" (X) Não é possivel dividir um número por zero, digite um número novamente:");
-                        segundoNumero = Convert.ToDouble(Console.ReadLine());
-                    }
-                    resultado = primeiroNumero / segundoNumero;
-                    sinal = "÷";
-                    resultadoInteiro = $" {primeiroNumero} {sinal} {segundoNumero} = {resultado}";
-                }
+                operacoes++;//pula para preencher o proximo bloco array
 
-                historico[operacoes] = $" {primeiroNumero} {sinal} {segundoNumero} = {resultado.ToString("F2")}"; //guarda no array a operação criando o historico
-                operacoes++; //pula para preencher o proximo bloco array
-                
                 return resultadoInteiro;
             }
+
+
+            //    if (opcao == "1")
+            //    {
+            //        resultado = primeiroNumero + segundoNumero;      // resultado original            
+            //        sinal = "+";       
+            //    }
+
+            //    else if (opcao == "2")
+            //    {
+            //        resultado = primeiroNumero - segundoNumero;
+            //        sinal = "-"; 
+            //    }
+
+            //    else if (opcao == "3")
+            //    {
+            //        resultado = primeiroNumero * segundoNumero;
+            //        sinal = "x";
+            //    }
+
+            //    else if (opcao == "4")
+            //    {
+            //        while (segundoNumero == 0)
+            //        {
+            //            Console.Write(" (X) Não é possivel dividir um número por zero, digite um número novamente:");
+            //            segundoNumero = Convert.ToDouble(Console.ReadLine());
+            //        }
+            //        resultado = primeiroNumero / segundoNumero;
+            //        sinal = "÷";
+            //    }
+
+            //    resultadoInteiro = $" {primeiroNumero} {sinal} {segundoNumero} = {resultado.ToString("F2")}"; //reformulei o resultado para mostrar toda a operação
+            //    historico[operacoes] = $" {resultadoInteiro}"; //mesmo bloco repetido em todas as operações
+
+            //    operacoes++; 
+
+            //    return resultadoInteiro;
+            //}
 
             static string Resultado(string resultadointeiro) //alterado para string
             {
