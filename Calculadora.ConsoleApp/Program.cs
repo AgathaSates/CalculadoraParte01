@@ -1,4 +1,7 @@
-﻿namespace Calculadora.ConsoleApp
+﻿using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace Calculadora.ConsoleApp
 {
     internal class Program
     {
@@ -9,7 +12,7 @@
         {
             while (true)
             {
-                string opcao = Menu();
+                int opcao = Menu();
 
                 if (Sair(opcao))
                     break;
@@ -24,12 +27,22 @@
                     Resultado(Operacoes(opcao));
 
                 Console.Write(" -> Deseja Realizar outra operação? (S/N): "); // ao final de cada operação volta ao menu
-                string continuar = Console.ReadLine()!.ToUpper(); // "!" usado para parar o warning
-                if (continuar == "N")
+                string continuar = Console.ReadLine()!; //"!" parar o aviso de warning
+                while (string.IsNullOrEmpty(continuar) || continuar.ToUpper() != "S" && continuar.ToUpper() != "N") //validação
+                {
+                    Console.Write("-> (X) Opção inválida! Digite novamente: ");
+                    continuar = Console.ReadLine()!; //"!" parar o aviso de warning
+                }
+
+                if (continuar.ToUpper() == "N")  //quebra o loop
+                {
+                    Console.Clear();
+                    Console.WriteLine("Adeus!");
                     break;
+                }
             }
 
-            static string Menu()
+            static int Menu() // alterado para int por conta da validação
             {
                 Console.Clear();
                 Console.WriteLine("--------------------------------");
@@ -41,33 +54,33 @@
                 Console.WriteLine(" 4 - Divisão");
                 Console.WriteLine(" 5 - Tabuada");
                 Console.WriteLine(" 6 - Histórico de Operações");
-                Console.WriteLine(" S - Sair");
+                Console.WriteLine(" 7 - Sair"); // alterado para facilitar a validação de entrada
                 Console.WriteLine("--------------------------------");
                 Console.Write(" -> Digite uma opção: ");
 
-                string opcao = Console.ReadLine()!.ToUpper();
-
+                int opcao;
+                while (!int.TryParse(Console.ReadLine(), out opcao) || opcao < 1 || opcao > 7) // validação com tryparse pois nao sabemos o valor a ser inserido ao certo (convert se usa quando tem certeza que será colocado o tipo dele))
+                    Console.Write("-> (X) Opção inválida! Digite novamente: ");
                 return opcao;
             }
 
-            static bool Sair(string opcao)
+            static bool Sair(int opcao) //alterados para int por conta da validação
             {
-                bool Sair = opcao == "S"; //se ele digitou é verdadeiro então faz a função seguinte aonde ele foi chamado(menu)
-
+                bool Sair = opcao == 7; //se ele digitou é verdadeiro então faz a função seguinte aonde ele foi chamado(menu)
+                Console.Clear();
+                Console.WriteLine("Adeus!"); //texto adeus
                 return Sair;
             }
 
-            static bool Tabuada(string opcao)
+            static bool Tabuada(int opcao)
             {
-                bool Tabuada = opcao == "5";
-
+                bool Tabuada = opcao == 5;
                 return Tabuada;
             }
 
-            static bool Historico(string opcao)
+            static bool Historico(int opcao)
             {
-                bool Historico = opcao == "6";
-
+                bool Historico = opcao == 6;
                 return Historico;
             }
 
@@ -79,7 +92,9 @@
                 Console.WriteLine("--------------------------------");
 
                 Console.Write(" -> Digite o número: ");
-                int numero = Convert.ToInt32(Console.ReadLine());
+                int numero;
+                while (!int.TryParse(Console.ReadLine(), out numero))   //validação de entrada
+                    Console.Write("-> (X) Opção inválida! Digite novamente: ");
 
                 Console.Clear();
                 Console.WriteLine("--------------------------------");
@@ -103,6 +118,7 @@
                     Console.WriteLine(" (X) Não há operações registradas.");
                     Console.WriteLine();
                 }
+
                 else
                 {
                     Console.WriteLine("-----------------------");
@@ -114,47 +130,53 @@
                         }
                     }
                     Console.WriteLine("-----------------------");
-
                 }
             }
 
-            static string Operacoes(string opcao) //alterado para string
+            static string Operacoes(int opcao) //alterado para retorno string e parametro int por conta da validação
             {
                 Console.Clear();
                 Console.WriteLine(" --- Digite os valores para realizar a operação ---"); //titulo
                 Console.WriteLine();
+
                 Console.Write(" -> Digite o primeiro número: ");
-                double primeiroNumero = Convert.ToDouble(Console.ReadLine());
+                double primeiroNumero;
+                while (!double.TryParse(Console.ReadLine(), out primeiroNumero)) //validaçao de entrada
+                    Console.Write("-> (X) Número inválido! Digite novamente: ");
 
                 Console.Write(" -> Digite o segundo número: ");
-                double segundoNumero = Convert.ToDouble(Console.ReadLine());
+                double segundoNumero;
+                while (!double.TryParse(Console.ReadLine(), out segundoNumero)) //validaçao de entrada
+                    Console.Write("-> (X) Número inválido! Digite novamente: ");
+
                 Console.WriteLine("-----------------------------");
-                
+
                 double resultado = 0;
                 string sinal = "";
 
                 switch (opcao)        //switch case para diminuir e melhorar o entendimento do codigo
                 {
-                    case "1":
-                        resultado = primeiroNumero + segundoNumero;
+                    case 1:                       
+                        resultado = primeiroNumero + segundoNumero; //resultado orriginal
                         sinal = "+";
                         break;
 
-                    case "2":
+                    case 2:
                         resultado = primeiroNumero - segundoNumero;
                         sinal = "-";
                         break;
 
-                    case "3":
+                    case 3:
                         resultado = primeiroNumero * segundoNumero;
                         sinal = "x";
                         break;
 
-                    case "4":
+                    case 4:
                         while (segundoNumero == 0)
                         {
                             Console.Write(" (X) Não é possível dividir por zero. Digite um número novamente: ");
-                            segundoNumero = Convert.ToDouble(Console.ReadLine());
+                            while (!double.TryParse(Console.ReadLine(), out segundoNumero) && segundoNumero>0)  //validaçao de entrada e confere novamente se é zero
+                                Console.Write("-> (X) Número inválido ou 0! Digite novamente: ");
                         }
                         resultado = primeiroNumero / segundoNumero;
                         sinal = "÷";
@@ -169,44 +191,6 @@
 
                 return resultadoInteiro;
             }
-
-
-            //    if (opcao == "1")
-            //    {
-            //        resultado = primeiroNumero + segundoNumero;      // resultado original            
-            //        sinal = "+";       
-            //    }
-
-            //    else if (opcao == "2")
-            //    {
-            //        resultado = primeiroNumero - segundoNumero;
-            //        sinal = "-"; 
-            //    }
-
-            //    else if (opcao == "3")
-            //    {
-            //        resultado = primeiroNumero * segundoNumero;
-            //        sinal = "x";
-            //    }
-
-            //    else if (opcao == "4")
-            //    {
-            //        while (segundoNumero == 0)
-            //        {
-            //            Console.Write(" (X) Não é possivel dividir um número por zero, digite um número novamente:");
-            //            segundoNumero = Convert.ToDouble(Console.ReadLine());
-            //        }
-            //        resultado = primeiroNumero / segundoNumero;
-            //        sinal = "÷";
-            //    }
-
-            //    resultadoInteiro = $" {primeiroNumero} {sinal} {segundoNumero} = {resultado.ToString("F2")}"; //reformulei o resultado para mostrar toda a operação
-            //    historico[operacoes] = $" {resultadoInteiro}"; //mesmo bloco repetido em todas as operações
-
-            //    operacoes++; 
-
-            //    return resultadoInteiro;
-            //}
 
             static string Resultado(string resultadointeiro) //alterado para string
             {
