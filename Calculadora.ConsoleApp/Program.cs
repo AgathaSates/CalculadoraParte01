@@ -22,13 +22,14 @@ namespace Calculadora.ConsoleApp
 
                 else if (Historico(opcao))
                     MostrarHistorico();
-
+               
                 else
                     Resultado(Operacoes(opcao));
 
                 Console.Write(" -> Deseja Realizar outra operação? (S/N): "); // ao final de cada operação volta ao menu
-                string continuar = Console.ReadLine()!; //"!" parar o aviso de warning
-                while (string.IsNullOrEmpty(continuar) || continuar.ToUpper() != "S" && continuar.ToUpper() != "N") //validação
+                string continuar = Console.ReadLine()!.ToUpper(); //"!" parar o aviso de warning
+
+                while (continuar.ToUpper() != "S" && continuar.ToUpper() != "N") //validação
                 {
                     Console.Write("-> (X) Opção inválida! Digite novamente: ");
                     continuar = Console.ReadLine()!; //"!" parar o aviso de warning
@@ -60,7 +61,7 @@ namespace Calculadora.ConsoleApp
 
                 int opcao;
                 while (!int.TryParse(Console.ReadLine(), out opcao) || opcao < 1 || opcao > 7) // validação com tryparse pois nao sabemos o valor a ser inserido ao certo (convert se usa quando tem certeza que será colocado o tipo dele))
-                    Console.Write("-> (X) Opção inválida! Digite novamente: ");
+                    Console.Write(" -> (X) Opção inválida! Digite novamente: ");
                 return opcao;
             }
 
@@ -94,7 +95,7 @@ namespace Calculadora.ConsoleApp
                 Console.Write(" -> Digite o número: ");
                 int numero;
                 while (!int.TryParse(Console.ReadLine(), out numero))   //validação de entrada
-                    Console.Write("-> (X) Opção inválida! Digite novamente: ");
+                    Console.Write(" -> (X) Opção inválida! Digite novamente: ");
 
                 Console.Clear();
                 Console.WriteLine("--------------------------------");
@@ -142,12 +143,12 @@ namespace Calculadora.ConsoleApp
                 Console.Write(" -> Digite o primeiro número: ");
                 double primeiroNumero;
                 while (!double.TryParse(Console.ReadLine(), out primeiroNumero)) //validaçao de entrada
-                    Console.Write("-> (X) Número inválido! Digite novamente: ");
+                    Console.Write(" -> (X) Número inválido! Digite novamente: ");
 
                 Console.Write(" -> Digite o segundo número: ");
                 double segundoNumero;
                 while (!double.TryParse(Console.ReadLine(), out segundoNumero)) //validaçao de entrada
-                    Console.Write("-> (X) Número inválido! Digite novamente: ");
+                    Console.Write(" -> (X) Número inválido! Digite novamente: ");
 
                 Console.WriteLine("-----------------------------");
 
@@ -176,7 +177,7 @@ namespace Calculadora.ConsoleApp
                         {
                             Console.Write(" (X) Não é possível dividir por zero. Digite um número novamente: ");
                             while (!double.TryParse(Console.ReadLine(), out segundoNumero) && segundoNumero>0)  //validaçao de entrada e confere novamente se é zero
-                                Console.Write("-> (X) Número inválido ou 0! Digite novamente: ");
+                                Console.Write(" -> (X) Número inválido ou 0! Digite novamente: ");
                         }
                         resultado = primeiroNumero / segundoNumero;
                         sinal = "÷";
