@@ -5,7 +5,7 @@
  ### Demonstração
 > Uma calculadora de console simples mas poderosa onde pode realizar as quatro operações matemáticas e a tabuada.
 >
->![Demonstração do Projeto, gif imgur](https://i.imgur.com/fnIG5hN.gif)
+>![Demonstração do Projeto, gif imgur](https://i.imgur.com/jXp6Who.gif)
 
 
 
